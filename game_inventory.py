@@ -26,7 +26,14 @@ def add_to_inventory(inventory, added_items):
 
 def remove_from_inventory(inventory, removed_items):
     """Remove from the inventory dictionary a list of items from removed_items."""
-    pass
+    if type(removed_items) is not list:
+        removed_items = [removed_items]
+    for item in removed_items:
+        if item in inventory:
+            inventory[item] = inventory[item] - 1
+            if inventory[item] < 1:
+                del inventory[item]
+    return inventory
 
 
 def print_table(inventory, order):
@@ -53,5 +60,9 @@ def export_inventory(inventory, filename):
 if __name__ == "__main__":
     inventory = {"raz": 1, "dwa": 2}
     display_inventory(inventory)
+    print('TTT')
     add_to_inventory(inventory, ["raz", "dwa", "trzy", "raz", "cztery", "raz", "raz"])
+    display_inventory(inventory)
+    print('TTT')
+    remove_from_inventory(inventory, ["pięć"])
     display_inventory(inventory)
