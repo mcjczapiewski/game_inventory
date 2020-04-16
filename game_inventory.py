@@ -13,8 +13,7 @@ def display_inventory(inventory):
 
 def add_to_inventory(inventory, added_items):
     """Add to the inventory dictionary a list of items from added_items."""
-    if type(added_items) is not list:
-        added_items = [added_items]
+    added_items = make_it_a_list(added_items)
     for item in added_items:
         if item not in inventory:
             inventory[item] = 1
@@ -25,8 +24,7 @@ def add_to_inventory(inventory, added_items):
 
 def remove_from_inventory(inventory, removed_items):
     """Remove from the inventory dictionary a list of items from removed_items."""
-    if type(removed_items) is not list:
-        removed_items = [removed_items]
+    removed_items = make_it_a_list(removed_items)
     for item in removed_items:
         if item in inventory:
             inventory[item] = inventory[item] - 1
@@ -35,10 +33,16 @@ def remove_from_inventory(inventory, removed_items):
     return inventory
 
 
+def make_it_a_list(single_item_string):
+    if type(single_item_string) is not list:
+        single_item_string = [single_item_string]
+    return single_item_string
+
+
 def print_table(inventory, order=""):
     """
-    Display the contents of the inventory in an ordered, well-organized table with
-    each column right-aligned.
+    Display the contents of the inventory in an ordered, well-organized table
+    with each column right-aligned.
     """
     the_longest_key, the_longest_value = number_of_whitespaces(inventory)
     number_of_dashes = the_longest_key + len(" | ") + the_longest_value
@@ -100,16 +104,28 @@ def import_inventory(inventory, filename="import_inventory.csv"):
     return inventory
 
 
-def export_inventory(inventory, filename):
+def export_inventory(inventory, filename="export_inventory.csv"):
     """Export the inventory into a CSV file."""
-
-    pass
+    if inventory:
+        write_it = ""
+        for key, value in inventory.items():
+            write_it += ("," + key) * value
+        try:
+            with open(filename, "w", encoding="utf-8") as save_inventory:
+                save_inventory.write(write_it[1:])
+        except PermissionError:
+            print(f"You don't have permission creating file '{filename}'!")
+            return
 
 
 if __name__ == "__main__":
-    inventory = {"raz": 1, "dwa": 2, "osiem": 11, "dwadzieściaaaaaa": 19333348}
-    add_to_inventory(inventory, ["raz", "dwa", "trzy", "trzy", "cztery", "trzy", "trzy"])
-    remove_from_inventory(inventory, ["pięć"])
+    inventory = {"raz": 1, "dwa": 2, "osiem": 11, "dwadzieścia": 18}
+    add_to_inventory(
+        inventory,
+        ["raz", "dwa", "trzy", "trzy", "cztery", "trzy", "trzy"]
+    )
+    remove_from_inventory(inventory, "pięć")
     print_table(inventory, "")
     import_inventory(inventory, "items.csv")
     print_table(inventory, "count,desc")
+    export_inventory(inventory)
