@@ -14,7 +14,14 @@ def display_inventory(inventory):
 
 def add_to_inventory(inventory, added_items):
     """Add to the inventory dictionary a list of items from added_items."""
-    pass
+    if type(added_items) is not list:
+        added_items = [added_items]
+    for item in added_items:
+        if item not in inventory:
+            inventory[item] = 1
+        else:
+            inventory[item] = inventory[item] + 1
+    return inventory
 
 
 def remove_from_inventory(inventory, removed_items):
@@ -44,5 +51,7 @@ def export_inventory(inventory, filename):
 
 
 if __name__ == "__main__":
-    inventory = {}
+    inventory = {"raz": 1, "dwa": 2}
+    display_inventory(inventory)
+    add_to_inventory(inventory, ["raz", "dwa", "trzy", "raz", "cztery", "raz", "raz"])
     display_inventory(inventory)
