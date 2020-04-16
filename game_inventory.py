@@ -6,6 +6,9 @@
 
 def display_inventory(inventory):
     """Display the contents of the inventory in a simple way."""
+    if inventory:
+        for key in inventory:
+            print(str(key) + ": " + str(inventory[key]))
     pass
 
 
@@ -38,3 +41,8 @@ def export_inventory(inventory, filename):
     """Export the inventory into a CSV file."""
 
     pass
+
+
+if __name__ == "__main__":
+    inventory = {}
+    display_inventory(inventory)
