@@ -41,7 +41,33 @@ def print_table(inventory, order):
     Display the contents of the inventory in an ordered, well-organized table with
     each column right-aligned.
     """
-
+    the_longest_key = 0
+    for key in inventory:
+        if len(key) > the_longest_key:
+            the_longest_key = len(key)
+    if the_longest_key < len("item name"):
+        the_longest_key = len("item name")
+    number_of_dashes = the_longest_key + len(" | count")
+    print("-" * number_of_dashes)
+    print("item name".rjust(the_longest_key) + " | count")
+    print("-" * number_of_dashes)
+    if order.lower() == "count,desc":
+        inventory = {
+            key: value for key, value
+            in sorted(inventory.items(), key=lambda x: x[1], reverse=True)
+        }
+    elif order.lower() == "count,asc":
+        inventory = {
+            key: value for key, value
+            in sorted(inventory.items(), key=lambda x: x[1])
+        }
+    for item in inventory:
+        print(
+            item.rjust(the_longest_key)
+            + " | "
+            + str(inventory[item]).rjust(len("count"))
+        )
+    print("-" * number_of_dashes)
     pass
 
 
@@ -58,11 +84,12 @@ def export_inventory(inventory, filename):
 
 
 if __name__ == "__main__":
-    inventory = {"raz": 1, "dwa": 2}
+    inventory = {"raz": 1, "dwa": 2, "osiem": 11, "dwadzieścia": 1948}
     display_inventory(inventory)
     print('TTT')
-    add_to_inventory(inventory, ["raz", "dwa", "trzy", "raz", "cztery", "raz", "raz"])
+    add_to_inventory(inventory, ["raz", "dwa", "trzy", "trzy", "cztery", "trzy", "trzy"])
     display_inventory(inventory)
     print('TTT')
     remove_from_inventory(inventory, ["pięć"])
     display_inventory(inventory)
+    print_table(inventory, "count,asc")
